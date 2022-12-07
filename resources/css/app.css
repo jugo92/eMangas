@@ -4,21 +4,6 @@
 
 .grid {
     overflow: hidden; }
-    .grid-back {
-      height: 100%;
-      width: 100%;
-      position: absolute; }
-    .grid-article-elmt {
-      height: 225px; }
-    .grid-article-article {
-      height: 250px; }
-    .grid-page-page {
-      height: 250px; }
-    .grid-commentaire-commentaire {
-      height: 250px; }
-    .grid-rounded {
-      background-color: #FFF;
-      border-radius: 15px; }
 
   .row {
     display: flex;

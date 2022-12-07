@@ -8,17 +8,15 @@ use Illuminate\Support\Facades\Auth;
 
 class AnnounceController extends Controller
 {
-    // public function getAnnounce(Request $request){
-    //     $announce = new Announce();
-    //     $announce->user_id=Auth::id();
-    //     $announce->message=$request->input('message');
-    //     $announce->save();
-    //     return redirect()->route('dashboard');
-    // }
     public function index()
     {
         $announces = Announce::paginate(8); //récupère les messages
         return view('announce/index', ['announces' => $announces]); //retourne la vue dashboard
+    }
+
+    public function myAnnounce(Request $request){
+        $announces = Announce::where("idUser", Auth::id())->paginate(8);
+        return view('announce/index', ['announces' => $announces]);
     }
 
     public function formAnnounce(Request $request)
@@ -44,6 +42,7 @@ class AnnounceController extends Controller
             $announce->inventory = $request->input('announce_inventory');
             $announce->nbSales = 0;
             $announce->save();
+            $announce->categorie_announces()->attach($announce->idCategorie);
         }else{
             $announce = Announce::findOrFail($request->input('announce_id'));
             $announce->idUser = Auth::id();
@@ -54,8 +53,9 @@ class AnnounceController extends Controller
             $announce->inventory = $request->input('announce_inventory');
             $announce->nbSales = 0;
             $announce->save();
+            $announce->categorie_announces()->attach($announce->idCategorie);
         }
-        return redirect()->route('index');
+        return redirect()->route('myAnnounce');
     }
 
     public function updateAnnounce(Request $request)
@@ -67,6 +67,6 @@ class AnnounceController extends Controller
     public function deleteAnnounce(Request $request)
     {
         Announce::destroy($request->announce_id);
-        return redirect()->route('index'); //redirige vers la page dashboard
+        return redirect()->route('myAnnounce'); //redirige vers la page dashboard
     }
 }
