@@ -31,7 +31,6 @@ Route::middleware('auth')->group(function () {
 
     // ANNOUNCE
 
-    Route::get('/getAnnounce', [AnnounceController::class, 'getAnnounce'])->name('getAnnounce');
     Route::get('/index', [AnnounceController::class, 'index'])->name('index');
     Route::get('/formAnnounce', [AnnounceController::class, 'formAnnounce'])->name('formAnnounce');
     Route::post('/postAnnounce', [AnnounceController::class, 'postAnnounce'])->name('postAnnounce');
@@ -41,11 +40,11 @@ Route::middleware('auth')->group(function () {
 
     // CATEGORIE
 
-    Route::get('/categories', [CategoriesController::class, 'categories'])->name('categories');
-    Route::get('/updateCategorie/{categorie_id}', [CategoriesController::class, 'updateCategorie'])->name('updateCategorie');
-    Route::get('/deleteCategorie/{categorie_id}', [CategoriesController::class, 'deleteCategorie'])->name('deleteCategorie');
-    Route::post('/postCategorie', [CategoriesController::class, 'postCategorie'])->name('postCategorie');
-    Route::get('/formCategorie', [CategoriesController::class, 'formCategorie'])->name('formCategorie');
+    Route::get('/categories', [CategoriesController::class, 'categories'])->name('categories')->middleware('role:admin');
+    Route::get('/updateCategorie/{categorie_id}', [CategoriesController::class, 'updateCategorie'])->name('updateCategorie')->middleware('role:admin');
+    Route::get('/deleteCategorie/{categorie_id}', [CategoriesController::class, 'deleteCategorie'])->name('deleteCategorie')->middleware('role:admin');
+    Route::post('/postCategorie', [CategoriesController::class, 'postCategorie'])->name('postCategorie')->middleware('role:admin');
+    Route::get('/formCategorie', [CategoriesController::class, 'formCategorie'])->name('formCategorie')->middleware('role:admin');
 
 });
 

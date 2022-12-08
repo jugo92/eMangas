@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Announce extends Model
 {
@@ -20,5 +21,9 @@ class Announce extends Model
     public function categorie_announces()
     {
         return $this->belongsToMany(Categorie::class);
+    }
+
+    public static function isAnnounceMine(int $idUserAnnounce){
+        return  Auth::id() === $idUserAnnounce;
     }
 }

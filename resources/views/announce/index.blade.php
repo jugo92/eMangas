@@ -15,7 +15,6 @@
                         <p>Cliquer ici pour créer une annonce -> <a href="{{route('formAnnounce')}}">ICI</a></p>
                     </div>
                     <div class="grid">
-
                         <div class="row">
                             @foreach($announces as $announce)
                             <div class="col col-3">
