@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Categorie;
+use Illuminate\Support\Facades\DB;
 
 class CategoriesController extends Controller
 {
@@ -45,6 +46,7 @@ class CategoriesController extends Controller
 
     public function deleteCategorie(Request $request)
     {
+        DB::table('announce_categorie')->where('categorie_id', $request->categorie_id)->delete();
         Categorie::destroy($request->categorie_id);
         return redirect()->route('categories'); //redirige vers la page dashboard
     }
