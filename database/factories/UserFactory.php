@@ -31,7 +31,7 @@ class UserFactory extends Factory
             'phoneNumber' => fake()->phoneNumber() ,
             'notes' => fake()->randomDigit(),
             'adresse' => fake()->address(),
-            'role' => fake()->randomDigit(),
+            'role' => 'user',
         ];
     }
 
