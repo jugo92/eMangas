@@ -28,9 +28,7 @@ class AnnounceController extends Controller
             $announce->user_id = Auth::id();
             return view("announce/formAnnounce", ['categories' => $categories->all()]);
         }else{
-            $cat = $categories->all();
-            return view('announce/formAnnounce')
-            ->with(['cat' => $cat]);
+            return view('announce/formAnnounce');
         }
     }
 
@@ -58,7 +56,11 @@ class AnnounceController extends Controller
              $announce->categorie_announces()->attach($id);
             }
         }else{
-            if($request->input('categories'))
+            foreach($categories->all() as $categorie){
+                if($request->input($categorie->id)){
+                    $arrCategorieId[] = $categorie->id;
+                }
+             }
             $listIdsCategorie = implode(',', $arrCategorieId);
             $announce = Announce::findOrFail($request->input('announce_id'));
             $announce->idUser = Auth::id();
@@ -68,19 +70,21 @@ class AnnounceController extends Controller
             $announce->title = $request->input('announce_title');
             $announce->inventory = $request->input('announce_inventory');
             $announce->nbSales = 0;
-            // $announce->save();
-            // $announce->categorie_announces()->attach($announce->idCategorie);
-        }
+            $announce->save();
+            foreach($arrCategorieId as $id){
+                $announce->categorie_announces()->attach($id);
+               }        }
         return redirect()->route('myAnnounce');
     }
 
     public function updateAnnounce(Request $request)
     {
+        $categories = new Categorie();
         $announce = Announce::findOrFail($request->announce_id);
         if(!$request->user()->role === 'admin' || !Announce::isAnnounceMine($announce->idUser)){
             abort(403);
         }
-        return view('announce/formAnnounce', ['announce' => $announce]);
+        return view('announce/formAnnounce', ['announce' => $announce, 'categories' => $categories->all(), 'categoriesChecked' => explode(',', $announce->idCategorie)]);
     }
 
     public function deleteAnnounce(Request $request)

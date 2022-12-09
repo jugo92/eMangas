@@ -24,14 +24,14 @@
                         <label for="announce_desc">Description</label>
                         <input type='text' name='announce_desc' value='@if(isset($announce)){{$announce->description}}@endif'><br>
 
-                        @foreach ($cat as $categorie)
+                         {{--@foreach ($categories as $categorie) 
                         <div class="col">
                             <input type="checkbox" id="categorie_{{$categorie->id}}" name="{{$categorie->id}}">
-                            <label for="categorie_{{$categorie->id}}">{{$categorie->name}}</label>
+                            <label for="categorie_{{$categorie->id}}">{{ $categorie->name }}</label>
                         </div>
-                        @endforeach
+                        @endforeach--}}
 
-                        <!-- @foreach ($categories as $categorie)
+                        @foreach ($categories as $categorie)
                         <div class="col">
                             @if(in_array($categorie->id, $categoriesChecked))
                             <input type="checkbox" id="categorie_{{$categorie->id}}" name="{{$categorie->id}}" checked>
@@ -40,7 +40,7 @@
                             @endif
                             <label for="categorie_{{$categorie->id}}">{{$categorie->name}}</label>
                         </div>
-                        @endforeach -->
+                        @endforeach
 
                         <label for="announce_price">Unit Price</label>
                         <input type='text' name='announce_price' value='@if(isset($announce)){{$announce->price}}@endif'><br>
