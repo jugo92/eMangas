@@ -31,12 +31,12 @@ Route::middleware('auth')->group(function () {
 
     // ANNOUNCE
 
-    Route::get('/index', [AnnounceController::class, 'index'])->name('index');
-    Route::get('/formAnnounce', [AnnounceController::class, 'formAnnounce'])->name('formAnnounce');
-    Route::post('/postAnnounce', [AnnounceController::class, 'postAnnounce'])->name('postAnnounce');
-    Route::get('/updateAnnounce/{announce_id}', [AnnounceController::class, 'updateAnnounce'])->name('updateAnnounce');
-    Route::get('/deleteAnnounce/{announce_id}', [AnnounceController::class, 'deleteAnnounce'])->name('deleteAnnounce');
-    Route::get('/myAnnounce', [AnnounceController::class, 'myAnnounce'])->name('myAnnounce');
+    Route::get('/index', [AnnounceController::class, 'index'])->name('index'); //liste tout les articles
+    Route::get('/formAnnounce', [AnnounceController::class, 'formAnnounce'])->name('formAnnounce'); // vue d'article
+    Route::post('/saveAnnounce', [AnnounceController::class, 'saveAnnounce'])->name('saveAnnounce'); // insére/met à jour puis redirige
+    Route::get('/updateAnnounce/{announce_id}', [AnnounceController::class, 'updateAnnounce'])->name('updateAnnounce'); // renvoie le formulaire pour maj
+    Route::get('/deleteAnnounce/{announce_id}', [AnnounceController::class, 'deleteAnnounce'])->name('deleteAnnounce'); // supprime puis redirige
+    Route::get('/myAnnounce', [AnnounceController::class, 'myAnnounce'])->name('myAnnounce'); // vue annonce utilisateur
 
     // CATEGORIE
 

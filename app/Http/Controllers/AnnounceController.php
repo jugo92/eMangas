@@ -9,15 +9,21 @@ use Illuminate\Support\Facades\Auth;
 
 class AnnounceController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $announces = Announce::paginate(8); //récupère les messages
-        return view('announce/index', ['announces' => $announces]); //retourne la vue dashboard
+        $var = $request->url();
+        $url = explode("/",$var);
+        $slug = end($url);
+        return view('announce/index', ['announces' => $announces, 'slug' => $slug]); //retourne la vue dashboard
     }
 
     public function myAnnounce(Request $request){
+        $var = $request->url();
+        $url = explode("/",$var);
+        $slug = end($url);
         $announces = Announce::where("idUser", Auth::id())->paginate(8);
-        return view('announce/index', ['announces' => $announces]);
+        return view('announce/index', ['announces' => $announces, 'slug' => $slug]);
     }
 
     public function formAnnounce(Request $request)
@@ -32,7 +38,7 @@ class AnnounceController extends Controller
         }
     }
 
-    public function postAnnounce(Request $request)
+    public function saveAnnounce(Request $request)
     {
         $announce = new Announce();
         $categories = new Categorie();

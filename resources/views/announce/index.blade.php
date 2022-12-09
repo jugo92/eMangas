@@ -16,6 +16,7 @@
                     </div>
                     <div class="grid">
                         <div class="row">
+                            {{$slug}}
                             @foreach($announces as $announce)
                             <div class="col col-3">
                                 <b>Annonce n° {{$announce->id}}</b><br>
@@ -25,13 +26,12 @@
                                 <b>Coût Unitaire :</b> {{$announce->price}}<br>
                                 <b>Quantité :</b> {{$announce->inventory}}<br>
                                 <b>Nombre de ventes :</b> {{$announce->nbSales}}<br>
-
-                                    @if($announce->idUser==Auth::id())
-                                    [<a href="{{route('deleteAnnounce', $announce->id)}}">delete</a>]
-                                    [<a href="{{route('updateAnnounce', $announce->id)}}">update</a>]
-                                    @endif
+                                @if($announce->idUser==Auth::id() and $slug<>'index')
+                                [<a href="{{route('deleteAnnounce', $announce->id)}}">delete</a>]
+                                [<a href="{{route('updateAnnounce', $announce->id)}}">update</a>]
+                                @endif
                             </div>
-                                @endforeach
+                            @endforeach
                         </div>
 
                     </div>
