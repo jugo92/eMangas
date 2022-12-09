@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\Announce;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\DB;
 
 class ProfileController extends Controller
 {
@@ -56,6 +58,9 @@ class ProfileController extends Controller
         $user = $request->user();
 
         Auth::logout();
+        foreach($user->announces as $announce){
+            DB::table('announce_categorie')->where('announce_id', $announce->id)->delete();
+        }
         $user->announces()->delete();
         $user->delete();
 
@@ -68,4 +73,5 @@ class ProfileController extends Controller
     public function announces(){
         return $this->has_many('Announce');
     }
+
 }

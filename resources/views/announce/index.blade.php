@@ -16,7 +16,6 @@
                     </div>
                     <div class="grid">
                         <div class="row">
-                            {{$slug}}
                             @foreach($announces as $announce)
                             <div class="col col-3">
                                 <b>Annonce n° {{$announce->id}}</b><br>
