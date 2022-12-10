@@ -102,4 +102,18 @@ class AnnounceController extends Controller
         Announce::destroy($request->announce_id);
         return redirect()->route('myAnnounce'); //redirige vers la page dashboard
     }
+
+     /**
+     * Show the Plan.
+     *
+     * @return mixed
+     */
+    public function show(Plan $plan, Request $request)
+    {   
+        $paymentMethods = $request->user()->paymentMethods();
+
+        $intent = $request->user()->createSetupIntent();
+        
+        return view('plans.show', compact('plan', 'intent'));
+    }
 }

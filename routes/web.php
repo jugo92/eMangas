@@ -3,6 +3,8 @@
 use App\Http\Controllers\AnnounceController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\SubscriptionController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -45,6 +47,19 @@ Route::middleware('auth')->group(function () {
     Route::get('/deleteCategorie/{categorie_id}', [CategoriesController::class, 'deleteCategorie'])->name('deleteCategorie')->middleware('role:admin');
     Route::post('/postCategorie', [CategoriesController::class, 'postCategorie'])->name('postCategorie')->middleware('role:admin');
     Route::get('/formCategorie', [CategoriesController::class, 'formCategorie'])->name('formCategorie')->middleware('role:admin');
+
+
+
+    //STRIPE
+    Route::get('/plans', [PaymentController::class, 'index'])->name('index');
+    Route::get('/plan/{plan}', [PaymentController::class, 'show'])->name('plan');
+
+    Route::post('/subscription', [SubscriptionController::class, 'create'])->name('subscription');
+
+
+    //Routes for create Plan
+    Route::get('create/plan', [SubscriptionController::class, 'createPlan'])->name('createPlan');
+    Route::post('store/plan', [SubscriptionController::class, 'storePlan'])->name('storePlan');
 
 });
 

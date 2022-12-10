@@ -26,4 +26,19 @@ class Announce extends Model
     public static function isAnnounceMine(int $idUserAnnounce){
         return  Auth::id() === $idUserAnnounce;
     }
+
+    protected $fillable = [
+        'title',
+        'slug',
+        'stripe_announce',
+        'price',
+        'description',
+        'inventory',
+        'nbSales'
+    ];
+
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
 }

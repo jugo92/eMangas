@@ -13,4 +13,17 @@ class Payment extends Model
     {
         return $this->belongsTo(Announce::class, 'id');
     }
+
+    protected $fillable = [
+        'name',
+        'slug',
+        'stripe_payment',
+        'cost',
+        'description'
+    ];
+
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
 }
