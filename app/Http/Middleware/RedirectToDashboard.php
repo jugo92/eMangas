@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 
-class EnsureUsersRole
+class RedirectToDashboard
 {
     /**
      * Handle an incoming request.
@@ -14,7 +14,7 @@ class EnsureUsersRole
      * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
-    public function handle(Request $request, Closure $next, string $role)
+    public function handle(Request $request, Closure $next)
     {
         if($request->user()->hasRole('admin')) return $next($request);
         return redirect(route('dashboard'));

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AnnounceController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\ProfileController;
@@ -30,6 +31,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::post('/profile/{user_token}', [ProfileController::class, 'destroyUser'])->name('profile.destroyUser');
+
+    // ADMIN DASHBOARD
+
+    Route::get('/admin_dashboard', [AdminController::class, 'admin_dashboard'])->name('admin_dashboard')->middleware('role:admin');
 
     // ANNOUNCE
 
@@ -54,6 +60,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/sells', [SubscriptionController::class, 'sells'])->name('sells'); // affiche mes ventes
     Route::get('/purchases', [SubscriptionController::class, 'purchases'])->name('purchases'); // affiche mes achats
     Route::post('/subscription', [SubscriptionController::class, 'create'])->name('subscription'); // enregistre le paiement
+
 
 });
 

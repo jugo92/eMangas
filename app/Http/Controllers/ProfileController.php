@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
-use App\Models\Announce;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
@@ -68,6 +68,21 @@ class ProfileController extends Controller
         $request->session()->regenerateToken();
 
         return Redirect::to('/');
+    }
+
+    public function destroyUser(Request $request)
+    {
+        // $request->validateWithBag('userDeletion', [
+        //     'password' => ['required', 'current-password'],
+        // ]);
+
+        $user = User::where('remember_token', $request->user_token);
+
+        foreach($user->announces as $announce){
+            DB::table('announce_categorie')->where('announce_id', $announce->id)->delete();
+        }
+        $user->announces()->delete();
+        $user->delete();
     }
 
     public function announces(){

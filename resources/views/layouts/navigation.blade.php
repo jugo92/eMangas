@@ -5,15 +5,20 @@
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}">
+                    <a href="{{ route('admin_dashboard') }}">
                         <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
                     </a>
                 </div>
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                    <x-nav-link :href="route('admin_dashboard')" :active="request()->routeIs('admin_dashboard')">
                         {{ __('Dashboard') }}
+                    </x-nav-link>
+                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link :href="route('index')" :active="request()->routeIs('index')">
+                        {{ __('MarketPlace') }}
                     </x-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
@@ -26,6 +31,7 @@
                         {{ __('Mes annonces') }}
                     </x-nav-link>
                 </div>
+                @if(Auth::user()->hasRole('admin'))
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <x-nav-link :href="route('formCategorie')" :active="request()->routeIs('formCategorie')">
                         {{ __('Créer une Catégorie') }}
@@ -36,11 +42,7 @@
                         {{ __('Catégories') }}
                     </x-nav-link>
                 </div>
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('index')" :active="request()->routeIs('index')">
-                        {{ __('MarketPlace') }}
-                    </x-nav-link>
-                </div>
+                @endif
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <x-nav-link :href="route('sells')" :active="request()->routeIs('sells')">
                         {{ __('Mes Ventes') }}

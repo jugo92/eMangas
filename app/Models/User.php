@@ -37,7 +37,7 @@ class User extends Authenticatable
     ];
 
     /**
-     * The attributes that should be hidden for serialization.
+         * The attributes that should be hidden for serialization.
      *
      * @var array<int, string>
      */
@@ -54,4 +54,8 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function hasRole(string $role){
+        return $this->getAttribute('role') === $role;
+    }
 }

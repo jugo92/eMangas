@@ -12,7 +12,13 @@
                     Welcome on e-Mangas !
                     <br><br>
                     <div class="grid">
-                        <p>Cliquer ici pour créer une annonce -> <a href="{{route('formAnnounce')}}">ICI</a></p>
+                        <div class="row">
+                            <div class="col col-3">
+                                <x-secondary-button class="">
+                                    {{ __('Créer une annonce') }}
+                                </x-secondary-button>
+                            </div>
+                        </div>
                     </div>
                     <div class="grid">
                         <div class="row">
