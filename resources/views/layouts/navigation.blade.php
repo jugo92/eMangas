@@ -41,6 +41,16 @@
                         {{ __('MarketPlace') }}
                     </x-nav-link>
                 </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link :href="route('sells')" :active="request()->routeIs('sells')">
+                        {{ __('Mes Ventes') }}
+                    </x-nav-link>
+                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link :href="route('purchases')" :active="request()->routeIs('purchases')">
+                        {{ __('Mes Achats') }}
+                    </x-nav-link>
+                </div>
             </div>
 
             <!-- Settings Dropdown -->

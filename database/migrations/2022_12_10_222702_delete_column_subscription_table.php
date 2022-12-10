@@ -13,9 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('announces', function (Blueprint $table) {
-            $table->string('slug')->unique();
-            $table->string('stripe_announce');
+        Schema::table('subscriptions', function (Blueprint $table) {
+            $table->dropColumn('stripe_id');
         });
     }
 

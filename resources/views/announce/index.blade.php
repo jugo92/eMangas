@@ -28,6 +28,7 @@
                                 @if($announce->idUser==Auth::id() and $slug<>'index')
                                 [<a href="{{route('deleteAnnounce', $announce->id)}}">delete</a>]
                                 [<a href="{{route('updateAnnounce', $announce->id)}}">update</a>]
+                                [<a href="{{route('plan', $announce->slug)}}">Choisir</a>]
                                 @endif
                             </div>
                             @endforeach

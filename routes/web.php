@@ -49,16 +49,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/formCategorie', [CategoriesController::class, 'formCategorie'])->name('formCategorie')->middleware('role:admin');
 
 
+    Route::get('/sells', [SubscriptionController::class, 'sells'])->name('sells');
+    Route::get('/purchases', [SubscriptionController::class, 'purchases'])->name('purchases');
 
     //STRIPE
-    Route::get('/plans', [PaymentController::class, 'index'])->name('index');
-    Route::get('/plan/{plan}', [PaymentController::class, 'show'])->name('plan');
+    Route::get('/plan/{announce_id}', [AnnounceController::class, 'show'])->name('plan');
 
     Route::post('/subscription', [SubscriptionController::class, 'create'])->name('subscription');
 
-
-    //Routes for create Plan
-    Route::get('create/plan', [SubscriptionController::class, 'createPlan'])->name('createPlan');
     Route::post('store/plan', [SubscriptionController::class, 'storePlan'])->name('storePlan');
 
 });

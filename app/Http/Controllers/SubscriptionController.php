@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Plan;
+use App\Models\Announce;
 use App\Models\User;
+use App\Models\Subscription;
+use Illuminate\Support\Facades\Auth;
 
 class SubscriptionController extends Controller
 {   
@@ -15,53 +17,44 @@ class SubscriptionController extends Controller
         $this->stripe = new \Stripe\StripeClient(env('STRIPE_SECRET'));
     }
 
-    public function create(Request $request, Plan $plan)
+    public function create(Request $request, Announce $plan)
     {
-        $plan = Plan::findOrFail($request->get('plan'));
+        $plan = Announce::findOrFail($request->get('plan'));
+
+        $subscription = new Subscription();
         
         $user = $request->user();
         $paymentMethod = $request->paymentMethod;
 
         $user->createOrGetStripeCustomer();
         $user->updateDefaultPaymentMethod($paymentMethod);
-        $user->newSubscription('default', $plan->stripe_plan)
-            ->create($paymentMethod, [
-                'email' => $user->email,
-            ]);
-        
+        // $user->newSubscription('default', $plan->stripe_announce,Auth::id())
+        //     ->create($paymentMethod, [
+        //         'email' => $user->email,
+        //     ]);
+
+        $subscription->name = 'default';
+        $subscription->user_id= Auth::id();
+        $subscription->stripe_status = 'active';
+        $subscription->id_vendeur = $plan->idUser;
+        $subscription->stripe_price = $plan->stripe_announce;
+        $subscription->price = $plan->price;
+        $subscription->quantity = 1;
+        $subscription->save();        
         return redirect()->route('dashboard');
     }
 
-
-    public function createPlan()
+    public function sells(Request $request)
     {
-        return view('plans.create');
+        $subscription = Subscription::all()->where('id_vendeur', Auth::id());
+        return view('plans.sell',['sells' => $subscription]);
     }
 
-    public function storePlan(Request $request)
-    {   
-        $data = $request->except('_token');
-
-        $data['slug'] = strtolower($data['name']);
-        $price = $data['cost'] *100; 
-
-        //create stripe product
-        $stripeProduct = $this->stripe->products->create([
-            'name' => $data['name'],
-        ]);
-        
-        //Stripe Plan Creation
-        $stripePlanCreation = $this->stripe->plans->create([
-            'amount' => $price,
-            'currency' => 'inr',
-            'interval' => 'month', //  it can be day,week,month or year
-            'product' => $stripeProduct->id,
-        ]);
-
-        $data['stripe_plan'] = $stripePlanCreation->id;
-
-        Plan::create($data);
-
-        echo 'plan has been created';
+    public function purchases(Request $request)
+    {
+        $subscription = Subscription::all()->where('user_id', Auth::id());
+        return view('plans.purchase',['purchases' => $subscription]);
     }
+
+
 }

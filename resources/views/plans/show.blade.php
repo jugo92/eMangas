@@ -3,7 +3,7 @@
     <div class="row justify-content-center">
         <div class="col-md-12">
             <div class="">
-                <p>You will be charged ${{ number_format($plan->cost, 2) }} for {{ $plan->name }} Plan</p>
+                <p>You will be charged ${{ number_format($announce->price, 2) }} for {{ $announce->title }} Paiement</p>
             </div>
             <div class="card">
                 <form action="{{ route('subscription') }}" method="post" id="payment-form">
@@ -20,7 +20,7 @@
                             </div>
                             <!-- Used to display form errors. -->
                             <div id="card-errors" role="alert"></div>
-                            <input type="hidden" name="plan" value="{{ $plan->id }}" />
+                            <input type="hidden" name="plan" value="{{ $announce->id }}" />
                         </div>
                     </div>
                     <div class="card-footer">

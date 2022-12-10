@@ -9,6 +9,13 @@ use Illuminate\Support\Facades\Auth;
 
 class AnnounceController extends Controller
 {
+
+    protected $stripe;
+
+    public function __construct() 
+    {
+        $this->stripe = new \Stripe\StripeClient(env('STRIPE_SECRET'));
+    }
     public function index(Request $request)
     {
         $announces = Announce::paginate(8); //récupère les messages
@@ -57,6 +64,23 @@ class AnnounceController extends Controller
             $announce->title = $request->input('announce_title');
             $announce->inventory = $request->input('announce_inventory');
             $announce->nbSales = 0;
+            $announce->slug = strtolower($request->input('announce_title'));
+            // $announce->stripe_announce = 'striped';
+    
+            //create stripe product
+            $stripeProduct = $this->stripe->products->create([
+                'name' => $request->input('announce_title')
+            ]);
+            
+            //Stripe Plan Creation
+            $stripePlanCreation = $this->stripe->plans->create([
+                'amount' => $request->input('announce_price'),
+                'currency' => 'inr',
+                'interval' => 'month', //  it can be day,week,month or year
+                'product' => $stripeProduct->id,
+            ]);
+    
+            $announce->stripe_announce = $stripePlanCreation->id;
             $announce->save();
             foreach($arrCategorieId as $id){
              $announce->categorie_announces()->attach($id);
@@ -108,12 +132,12 @@ class AnnounceController extends Controller
      *
      * @return mixed
      */
-    public function show(Plan $plan, Request $request)
+    public function show(Request $request)
     {   
         $paymentMethods = $request->user()->paymentMethods();
 
         $intent = $request->user()->createSetupIntent();
-        
-        return view('plans.show', compact('plan', 'intent'));
+        $announce = Announce::where('slug', $request->announce_id)->firstorfail();
+        return view('plans.show', compact('announce', 'intent'));
     }
 }
