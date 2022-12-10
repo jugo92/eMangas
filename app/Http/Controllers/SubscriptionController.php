@@ -17,9 +17,9 @@ class SubscriptionController extends Controller
         $this->stripe = new \Stripe\StripeClient(env('STRIPE_SECRET'));
     }
 
-    public function create(Request $request, Announce $plan)
+    public function create(Request $request, Announce $announce)
     {
-        $plan = Announce::findOrFail($request->get('plan'));
+        $announce = Announce::findOrFail($request->get('plan'));
 
         $subscription = new Subscription();
         
@@ -36,10 +36,12 @@ class SubscriptionController extends Controller
         $subscription->name = 'default';
         $subscription->user_id= Auth::id();
         $subscription->stripe_status = 'active';
-        $subscription->id_vendeur = $plan->idUser;
-        $subscription->stripe_price = $plan->stripe_announce;
-        $subscription->price = $plan->price;
+        $subscription->id_vendeur = $announce->idUser;
+        $subscription->stripe_price = $announce->stripe_announce;
+        $subscription->price = $announce->price;
         $subscription->quantity = 1;
+
+        $announce->update(['inventory' => $announce->inventory - 1, 'nbSales' => $announce->nbSales + 1]);
         $subscription->save();        
         return redirect()->route('dashboard');
     }
