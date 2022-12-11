@@ -58,4 +58,29 @@ class User extends Authenticatable
     public function hasRole(string $role){
         return $this->getAttribute('role') === $role;
     }
+
+    public function anonymize(User $user){
+        $randomString = $user->generateRandomString();
+        $user->name=$randomString;
+        $user->firstName=$randomString;
+        $user->pseudo=$randomString;
+        $user->email=$randomString;
+        $user->password=$randomString;
+        $user->phoneNumber=$randomString;
+        $user->notes=0;
+        $user->adresse=$randomString;
+        $user->role='inactive';
+        $user->name=$randomString;
+        $user->save();
+    }
+
+    public function generateRandomString($length = 10) {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
+    }
 }

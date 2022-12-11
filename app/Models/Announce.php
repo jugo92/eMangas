@@ -14,6 +14,12 @@ class Announce extends Model
     {
         return $this->belongsTo(User::class, 'id');
     }
+
+    public function like()
+    {
+        return $this->hasMany(Like::class, 'idAnnounce');
+    }
+
     public function payment()
     {
         return $this->hasOne(Payment::class, 'id');

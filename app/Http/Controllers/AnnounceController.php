@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Announce;
 use App\Models\Categorie;
+use App\Models\Like;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -12,17 +13,18 @@ class AnnounceController extends Controller
 
     protected $stripe;
 
-    public function __construct() 
+    public function __construct()
     {
         $this->stripe = new \Stripe\StripeClient(env('STRIPE_SECRET'));
     }
     public function index(Request $request)
     {
+        $likes = Like::all();
         $announces = Announce::paginate(8); //récupère les messages
         $var = $request->url();
         $url = explode("/",$var);
         $slug = end($url);
-        return view('announce/index', ['announces' => $announces, 'slug' => $slug]); //retourne la vue dashboard
+        return view('announce/index', ['announces' => $announces, 'slug' => $slug, 'likes' => $likes]); //retourne la vue dashboard
     }
 
     public function myAnnounce(Request $request){
@@ -66,12 +68,12 @@ class AnnounceController extends Controller
             $announce->nbSales = 0;
             $announce->slug = strtolower($request->input('announce_title'));
             // $announce->stripe_announce = 'striped';
-    
+
             //create stripe product
             $stripeProduct = $this->stripe->products->create([
                 'name' => $request->input('announce_title')
             ]);
-            
+
             //Stripe Plan Creation
             $stripePlanCreation = $this->stripe->plans->create([
                 'amount' => $request->input('announce_price'),
@@ -79,7 +81,7 @@ class AnnounceController extends Controller
                 'interval' => 'month', //  it can be day,week,month or year
                 'product' => $stripeProduct->id,
             ]);
-    
+
             $announce->stripe_announce = $stripePlanCreation->id;
             $announce->save();
             foreach($arrCategorieId as $id){
@@ -133,7 +135,7 @@ class AnnounceController extends Controller
      * @return mixed
      */
     public function show(Request $request)
-    {   
+    {
         $paymentMethods = $request->user()->paymentMethods();
 
         $intent = $request->user()->createSetupIntent();

@@ -25,26 +25,27 @@
                         <div class="row">
                             @foreach($users as $user)
                             @if(Auth::user()<>$user)
-                            <div class="col col-4">
-                                <p><b>Nom : </b>{{$user->name}}</p>
-                                <p><b>Email : </b>{{$user->email}}</p>
-                                <p><b>Pseudo : </b>{{$user->pseudo}}</p>
-                                <p><b>N° de téléphone : </b>{{$user->phoneNumber}}</p>
-                                <p><b>Adresse : </b>{{$user->adresse}}</p>
-                                <p><b>Role : </b>{{$user->role}}</p>
-                                <a href="{{route('profile.destroyUser', $user->remember_token)}}">
-                                    <x-danger-button>supprimer</x-danger-button>
-                                </a>
-                            </div>
-                            @endif
-                            @endforeach
+                                <div class="col col-4">
+                                    <p><b>Nom : </b>{{$user->name}}</p>
+                                    <p><b>Email : </b>{{$user->email}}</p>
+                                    <p><b>Pseudo : </b>{{$user->pseudo}}</p>
+                                    <p><b>N° de téléphone : </b>{{$user->phoneNumber}}</p>
+                                    <p><b>Adresse : </b>{{$user->adresse}}</p>
+                                    <p><b>Role : </b>{{$user->role}}</p>
+                                    <form method="post" action="{{route('propro', $user->id)}}">
+                                    @csrf
+                                    @method('delete')
+                                        <input type="submit" value="Supprimer">
+                                    </form>
+                                </div>
+                                @endif
+                                @endforeach
                         </div>
                         <ul>
-                        <br>
+                            <br>
                             {{ $users->links(); }}
                         </ul>
                     </section>
-
                 </div>
             </div>
         </div>

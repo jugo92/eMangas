@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\DB;
 
+use function PHPUnit\Framework\isNull;
+
 class ProfileController extends Controller
 {
     /**
@@ -49,44 +51,45 @@ class ProfileController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy(Request $request)
-    {
-        $request->validateWithBag('userDeletion', [
-            'password' => ['required', 'current-password'],
-        ]);
+    // public function destroy(Request $request)
+    // {
+    //     $request->validateWithBag('userDeletion', [
+    //         'password' => ['required', 'current-password'],
+    //     ]);
 
-        $user = $request->user();
+    //     $user = $request->user();
+    //     Auth::logout();
 
-        Auth::logout();
-        foreach($user->announces as $announce){
-            DB::table('announce_categorie')->where('announce_id', $announce->id)->delete();
-        }
-        $user->announces()->delete();
-        $user->delete();
+    //     foreach ($user->announces as $announce) {
+    //         DB::table('announce_categorie')->where('announce_id', $announce->id)->delete();
+    //     }
+    //     $user->announces()->delete();
+    //     $user->anonymize($user);
+    //     $user->save();
 
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+    //     $request->session()->invalidate();
+    //     $request->session()->regenerateToken();
 
-        return Redirect::to('/');
-    }
+    //     Redirect::to('/');
+    // }
 
     public function destroyUser(Request $request)
     {
-        // $request->validateWithBag('userDeletion', [
-        //     'password' => ['required', 'current-password'],
-        // ]);
+        $userToDelete = User::where('id', $request->user_id)->firstOrFail();
+        $userToDelete->anonymize($userToDelete);
 
-        $user = User::where('remember_token', $request->user_token);
-
-        foreach($user->announces as $announce){
+        foreach ($userToDelete->announces as $announce) {
             DB::table('announce_categorie')->where('announce_id', $announce->id)->delete();
         }
-        $user->announces()->delete();
-        $user->delete();
+        $userToDelete->announces()->delete();
+        $userToDelete->anonymize($userToDelete);
+        $userToDelete->save();
+
+        return Redirect::to('admin_dashboard');
     }
 
-    public function announces(){
+    public function announces()
+    {
         return $this->has_many('Announce');
     }
-
 }

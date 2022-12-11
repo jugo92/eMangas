@@ -23,6 +23,12 @@
                     <div class="grid">
                         <div class="row">
                             @foreach($announces as $announce)
+                            <?php
+                            $nbLike=0;
+                                foreach($likes as $like){
+                                    if($like->idAnnounce == $announce->id) $nbLike++;
+                                }
+                            ?>
                             <div class="col col-3">
                                 <b>Annonce n° {{$announce->id}}</b><br>
                                 <b>Catégorie  :</b> {{$announce->idCategorie=1}}<br>
@@ -35,6 +41,9 @@
                                 [<a href="{{route('deleteAnnounce', $announce->id)}}">delete</a>]
                                 [<a href="{{route('updateAnnounce', $announce->id)}}">update</a>]
                                 @endif
+                                [<a href="{{route('plan', $announce->slug)}}">Like</a>]
+                                [<a href="{{route('plan', $announce->slug)}}">Dislike</a>]
+                                <b>Nb likes : </b> <?= $nbLike?>
                                 @if($announce->idUser!=Auth::id() and $slug<>'myAnnounce' and $announce->inventory > 0)
                                 [<a href="{{route('plan', $announce->slug)}}">Acheter</a>]
                                 @endif
