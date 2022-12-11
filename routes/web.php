@@ -33,31 +33,27 @@ Route::middleware('auth')->group(function () {
 
     // ANNOUNCE
 
-    Route::get('/index', [AnnounceController::class, 'index'])->name('index'); //liste tout les articles
-    Route::get('/formAnnounce', [AnnounceController::class, 'formAnnounce'])->name('formAnnounce'); // vue d'article
-    Route::post('/saveAnnounce', [AnnounceController::class, 'saveAnnounce'])->name('saveAnnounce'); // insére/met à jour puis redirige
-    Route::get('/updateAnnounce/{announce_id}', [AnnounceController::class, 'updateAnnounce'])->name('updateAnnounce'); // renvoie le formulaire pour maj
-    Route::get('/deleteAnnounce/{announce_id}', [AnnounceController::class, 'deleteAnnounce'])->name('deleteAnnounce'); // supprime puis redirige
-    Route::get('/myAnnounce', [AnnounceController::class, 'myAnnounce'])->name('myAnnounce'); // vue annonce utilisateur
+    Route::get('/index', [AnnounceController::class, 'index'])->name('index'); //liste les articles
+    Route::get('/formAnnounce', [AnnounceController::class, 'formAnnounce'])->name('formAnnounce'); // formulaire de saisie d'une annonce
+    Route::post('/saveAnnounce', [AnnounceController::class, 'saveAnnounce'])->name('saveAnnounce'); // enregistre l'annonce
+    Route::get('/updateAnnounce/{announce_id}', [AnnounceController::class, 'updateAnnounce'])->name('updateAnnounce'); // formulaire de saisie d'une annonce
+    Route::get('/deleteAnnounce/{announce_id}', [AnnounceController::class, 'deleteAnnounce'])->name('deleteAnnounce'); // supprime une annonce
+    Route::get('/myAnnounce', [AnnounceController::class, 'myAnnounce'])->name('myAnnounce'); // liste mes annonces
 
     // CATEGORIE
 
-    Route::get('/categories', [CategoriesController::class, 'categories'])->name('categories')->middleware('role:admin');
-    Route::get('/updateCategorie/{categorie_id}', [CategoriesController::class, 'updateCategorie'])->name('updateCategorie')->middleware('role:admin');
-    Route::get('/deleteCategorie/{categorie_id}', [CategoriesController::class, 'deleteCategorie'])->name('deleteCategorie')->middleware('role:admin');
-    Route::post('/postCategorie', [CategoriesController::class, 'postCategorie'])->name('postCategorie')->middleware('role:admin');
-    Route::get('/formCategorie', [CategoriesController::class, 'formCategorie'])->name('formCategorie')->middleware('role:admin');
-
-
-    Route::get('/sells', [SubscriptionController::class, 'sells'])->name('sells');
-    Route::get('/purchases', [SubscriptionController::class, 'purchases'])->name('purchases');
+    Route::get('/categories', [CategoriesController::class, 'categories'])->name('categories')->middleware('role:admin'); // liste les catégories
+    Route::get('/updateCategorie/{categorie_id}', [CategoriesController::class, 'updateCategorie'])->name('updateCategorie')->middleware('role:admin'); // met à jour les catégories
+    Route::get('/deleteCategorie/{categorie_id}', [CategoriesController::class, 'deleteCategorie'])->name('deleteCategorie')->middleware('role:admin'); // supprime les catégories
+    Route::post('/postCategorie', [CategoriesController::class, 'postCategorie'])->name('postCategorie')->middleware('role:admin'); // enregistre la catégorie
+    Route::get('/formCategorie', [CategoriesController::class, 'formCategorie'])->name('formCategorie')->middleware('role:admin'); // formulaire de saisie des catégorie
 
     //STRIPE
-    Route::get('/plan/{announce_id}', [AnnounceController::class, 'show'])->name('plan');
 
-    Route::post('/subscription', [SubscriptionController::class, 'create'])->name('subscription');
-
-    Route::post('store/plan', [SubscriptionController::class, 'storePlan'])->name('storePlan');
+    Route::get('/plan/{announce_id}', [AnnounceController::class, 'show'])->name('plan'); // saisie des coord bancaires
+    Route::get('/sells', [SubscriptionController::class, 'sells'])->name('sells'); // affiche mes ventes
+    Route::get('/purchases', [SubscriptionController::class, 'purchases'])->name('purchases'); // affiche mes achats
+    Route::post('/subscription', [SubscriptionController::class, 'create'])->name('subscription'); // enregistre le paiement
 
 });
 

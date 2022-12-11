@@ -9,10 +9,10 @@ use App\Models\Subscription;
 use Illuminate\Support\Facades\Auth;
 
 class SubscriptionController extends Controller
-{   
+{
     protected $stripe;
 
-    public function __construct() 
+    public function __construct()
     {
         $this->stripe = new \Stripe\StripeClient(env('STRIPE_SECRET'));
     }
@@ -22,27 +22,25 @@ class SubscriptionController extends Controller
         $announce = Announce::findOrFail($request->get('plan'));
 
         $subscription = new Subscription();
-        
-        $user = $request->user();
-        $paymentMethod = $request->paymentMethod;
 
-        $user->createOrGetStripeCustomer();
-        $user->updateDefaultPaymentMethod($paymentMethod);
+        // $user = $request->user();
+        // $paymentMethod = $request->paymentMethod;
+
+        // $user->createOrGetStripeCustomer();
+        // $user->updateDefaultPaymentMethod($paymentMethod);
         // $user->newSubscription('default', $plan->stripe_announce,Auth::id())
         //     ->create($paymentMethod, [
         //         'email' => $user->email,
         //     ]);
 
-        $subscription->name = 'default';
-        $subscription->user_id= Auth::id();
-        $subscription->stripe_status = 'active';
+        $subscription->id_acheteur= Auth::id();
         $subscription->id_vendeur = $announce->idUser;
-        $subscription->stripe_price = $announce->stripe_announce;
+        $subscription->stripe_announce = $announce->stripe_announce;
         $subscription->price = $announce->price;
         $subscription->quantity = 1;
 
         $announce->update(['inventory' => $announce->inventory - 1, 'nbSales' => $announce->nbSales + 1]);
-        $subscription->save();        
+        $subscription->save();
         return redirect()->route('dashboard');
     }
 
@@ -54,7 +52,7 @@ class SubscriptionController extends Controller
 
     public function purchases(Request $request)
     {
-        $subscription = Subscription::all()->where('user_id', Auth::id());
+        $subscription = Subscription::all()->where('id_acheteur', Auth::id());
         return view('plans.purchase',['purchases' => $subscription]);
     }
 
