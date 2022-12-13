@@ -15,7 +15,7 @@
                         <div class="row">
                             <div class="col col-3">
                                 <a href="{{route('formAnnounce')}}">
-                                    <x-secondary-button class="">
+                                    <x-secondary-button>
                                         {{ __('Créer une annonce') }}
                                     </x-secondary-button>
                                 </a>

@@ -7,6 +7,9 @@ use App\Models\Announce;
 use App\Models\User;
 use App\Models\Subscription;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
+use IlluminateSupportCarbon;
+use Spatie\Flash\Flash;
 
 class SubscriptionController extends Controller
 {
@@ -37,11 +40,12 @@ class SubscriptionController extends Controller
         $subscription->id_vendeur = $announce->idUser;
         $subscription->stripe_announce = $announce->stripe_announce;
         $subscription->price = $announce->price;
+        $subscription->created_at= now()->tz('Europe/Paris');;
         $subscription->quantity = 1;
 
         $announce->update(['inventory' => $announce->inventory - 1, 'nbSales' => $announce->nbSales + 1]);
         $subscription->save();
-        return redirect()->route('dashboard');
+        return redirect()->route('purchases')->with('message', 'Paiement enregistré avec succés');
     }
 
     public function sells(Request $request)
@@ -52,6 +56,7 @@ class SubscriptionController extends Controller
 
     public function purchases(Request $request)
     {
+        Session::flash('success', 'Nouveau paiement');
         $subscription = Subscription::all()->where('id_acheteur', Auth::id());
         return view('plans.purchase',['purchases' => $subscription]);
     }

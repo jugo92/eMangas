@@ -35,7 +35,7 @@ class CategoriesController extends Controller
             $categorie->name = $request->input('categorie_name');
             $categorie->save();
         }
-        return redirect()->route('categories');
+        return redirect()->route('categories')->with('message', 'Catégorie enregistré avec succés');;
     }
 
     public function updateCategorie(Request $request)
@@ -48,6 +48,6 @@ class CategoriesController extends Controller
     {
         DB::table('announce_categorie')->where('categorie_id', $request->categorie_id)->delete();
         Categorie::destroy($request->categorie_id);
-        return redirect()->route('categories'); //redirige vers la page dashboard
+        return redirect()->route('categories')->with('message', 'Catégorie supprimé avec succés'); //redirige vers la page dashboard
     }
 }

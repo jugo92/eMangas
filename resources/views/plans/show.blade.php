@@ -1,18 +1,27 @@
-<x-app-layout>
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-12">
-            <div class="">
+
+
+    <x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ __('Paiement') }}
+        </h2>
+    </x-slot>
+
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 bg-white border-b border-gray-200">
                 <p>You will be charged ${{ number_format($announce->price, 2) }} for {{ $announce->title }} Paiement</p>
-            </div>
-            <div class="card">
+                    <div class="grid">
+                        <div class="row">
+                        <div class="col col-12 col-md-12 card">
                 <form action="{{ route('subscription') }}" method="post" id="payment-form">
-                    @csrf                    
+                    @csrf
                     <div class="form-group">
                         <div class="card-header">
                             <label for="card-element">
                                 Enter your credit card information
-                            </label>
+                            </label><br><br>
                         </div>
                         <div class="card-body">
                             <div id="card-element">
@@ -22,19 +31,25 @@
                             <div id="card-errors" role="alert"></div>
                             <input type="hidden" name="plan" value="{{ $announce->id }}" />
                         </div>
-                    </div>
+                    </div><br>
                     <div class="card-footer">
-                      <button
+                      <x-secondary-button
                       id="card-button"
                       class="btn btn-dark"
                       type="submit"
                       data-secret="{{ $intent->client_secret }}"
-                    > Pay </button>
+                    > Pay </x-secondary-button>
                     </div>
                 </form>
             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+
+
     @section('extra-js')
 <script src="https://js.stripe.com/v3/"></script>
 <script>

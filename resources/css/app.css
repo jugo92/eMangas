@@ -6,10 +6,27 @@
   overflow: hidden;
 }
 
-.grid h1, h2, p{
-    margin: revert;
+.grid h1,
+h2,
+p {
+  margin: revert;
   font-size: revert;
   font-weight: revert;
+}
+
+.flash {
+  position: fixed;
+  top: 0px;
+  right: 0px;
+  height: 50px;
+  width: 100%;
+  transition: all 1s;
+  background-color: black;
+}
+
+.flash-success {
+  background-color: #43bc21;
+  color: #FFF;
 }
 
 .row {
