@@ -3,9 +3,11 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AnnounceController;
 use App\Http\Controllers\CategoriesController;
+use App\Http\Controllers\LikeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\SubscriptionController;
+use App\Models\Like;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -55,11 +57,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/formCategorie', [CategoriesController::class, 'formCategorie'])->name('formCategorie')->middleware('role:admin'); // formulaire de saisie des catégorie
 
     //STRIPE
+    Route::get('/like/{announce_id}', [LikeController::class, 'like'])->name('like');
+    Route::get('/dislike/{announce_id}', [LikeController::class, 'dislike'])->name('dislike');
 
     Route::get('/plan/{announce_id}', [AnnounceController::class, 'show'])->name('plan'); // saisie des coord bancaires
     Route::get('/sells', [SubscriptionController::class, 'sells'])->name('sells'); // affiche mes ventes
     Route::get('/purchases', [SubscriptionController::class, 'purchases'])->name('purchases'); // affiche mes achats
     Route::post('/subscription', [SubscriptionController::class, 'create'])->name('subscription'); // enregistre le paiement
+
+    //LIKE
 
 
 });

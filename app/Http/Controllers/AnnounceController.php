@@ -22,14 +22,15 @@ class AnnounceController extends Controller
         $likes = Like::all();
         $announces = Announce::paginate(8); //récupère les messages
         $var = $request->url();
-        $url = explode("/",$var);
+        $url = explode("/", $var);
         $slug = end($url);
         return view('announce/index', ['announces' => $announces, 'slug' => $slug, 'likes' => $likes]); //retourne la vue dashboard
     }
 
-    public function myAnnounce(Request $request){
+    public function myAnnounce(Request $request)
+    {
         $var = $request->url();
-        $url = explode("/",$var);
+        $url = explode("/", $var);
         $slug = end($url);
         $announces = Announce::where("idUser", Auth::id())->paginate(8);
         return view('announce/index', ['announces' => $announces, 'slug' => $slug]);
@@ -42,7 +43,7 @@ class AnnounceController extends Controller
         if ($request->announce_id == null) {
             $announce->user_id = Auth::id();
             return view("announce/formAnnounce", ['categories' => $categories->all()]);
-        }else{
+        } else {
             return view('announce/formAnnounce');
         }
     }
@@ -52,12 +53,12 @@ class AnnounceController extends Controller
         $announce = new Announce();
         $categories = new Categorie();
         $arrCategorieId = [];
-        if($request->input('announce_id') == null){
-            foreach($categories->all() as $categorie){
-                if($request->input($categorie->id)){
+        if ($request->input('announce_id') == null) {
+            foreach ($categories->all() as $categorie) {
+                if ($request->input($categorie->id)) {
                     $arrCategorieId[] = $categorie->id;
                 }
-             }
+            }
             $listIdsCategorie = implode(',', $arrCategorieId);
             $announce->idUser = Auth::id();
             $announce->idCategorie = $listIdsCategorie;
@@ -65,6 +66,8 @@ class AnnounceController extends Controller
             $announce->price = $request->input('announce_price');
             $announce->title = $request->input('announce_title');
             $announce->inventory = $request->input('announce_inventory');
+            $announce->avis_positif = 0;
+            $announce->avis_negatif = 0;
             $announce->nbSales = 0;
             $announce->slug = strtolower($request->input('announce_title'));
             // $announce->stripe_announce = 'striped';
@@ -84,15 +87,15 @@ class AnnounceController extends Controller
 
             $announce->stripe_announce = $stripePlanCreation->id;
             $announce->save();
-            foreach($arrCategorieId as $id){
-             $announce->categorie_announces()->attach($id);
+            foreach ($arrCategorieId as $id) {
+                $announce->categorie_announces()->attach($id);
             }
-        }else{
-            foreach($categories->all() as $categorie){
-                if($request->input($categorie->id)){
+        } else {
+            foreach ($categories->all() as $categorie) {
+                if ($request->input($categorie->id)) {
                     $arrCategorieId[] = $categorie->id;
                 }
-             }
+            }
             $listIdsCategorie = implode(',', $arrCategorieId);
             $announce = Announce::findOrFail($request->input('announce_id'));
             $announce->idUser = Auth::id();
@@ -101,11 +104,14 @@ class AnnounceController extends Controller
             $announce->price = $request->input('announce_price');
             $announce->title = $request->input('announce_title');
             $announce->inventory = $request->input('announce_inventory');
-            $announce->nbSales = 0;
+            $announce->avis_positif = $announce->avis_positif;
+            $announce->avis_negatif = $announce->avis_negatif;
+            $announce->nbSales = $announce->nbSales;
             $announce->save();
-            foreach($arrCategorieId as $id){
+            foreach ($arrCategorieId as $id) {
                 $announce->categorie_announces()->attach($id);
-               }        }
+            }
+        }
         return redirect()->route('myAnnounce');
     }
 
@@ -113,7 +119,7 @@ class AnnounceController extends Controller
     {
         $categories = new Categorie();
         $announce = Announce::findOrFail($request->announce_id);
-        if(!$request->user()->role === 'admin' || !Announce::isAnnounceMine($announce->idUser)){
+        if (!$request->user()->role === 'admin' || !Announce::isAnnounceMine($announce->idUser)) {
             abort(403);
         }
         return view('announce/formAnnounce', ['announce' => $announce, 'categories' => $categories->all(), 'categoriesChecked' => explode(',', $announce->idCategorie)]);
@@ -122,14 +128,14 @@ class AnnounceController extends Controller
     public function deleteAnnounce(Request $request)
     {
         $announce = Announce::findOrFail($request->announce_id);
-        if(!$request->user()->role === 'admin' || !Announce::isAnnounceMine($announce->idUser)){
+        if (!$request->user()->role === 'admin' || !Announce::isAnnounceMine($announce->idUser)) {
             abort(403);
         }
         Announce::destroy($request->announce_id);
         return redirect()->route('myAnnounce'); //redirige vers la page dashboard
     }
 
-     /**
+    /**
      * Show the Plan.
      *
      * @return mixed

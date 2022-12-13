@@ -14,9 +14,11 @@
                     <div class="grid">
                         <div class="row">
                             <div class="col col-3">
-                                <x-secondary-button class="">
-                                    {{ __('Créer une annonce') }}
-                                </x-secondary-button>
+                                <a href="{{route('formAnnounce')}}">
+                                    <x-secondary-button class="">
+                                        {{ __('Créer une annonce') }}
+                                    </x-secondary-button>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -24,29 +26,31 @@
                         <div class="row">
                             @foreach($announces as $announce)
                             <?php
-                            $nbLike=0;
-                                foreach($likes as $like){
-                                    if($like->idAnnounce == $announce->id) $nbLike++;
+                            $nbLike = 0;
+                            if (isset($likes)) {
+                                foreach ($likes as $like) {
+                                    if ($like->idAnnounce == $announce->id) $nbLike++;
                                 }
+                            }
                             ?>
                             <div class="col col-3">
                                 <b>Annonce n° {{$announce->id}}</b><br>
-                                <b>Catégorie  :</b> {{$announce->idCategorie=1}}<br>
+                                <b>Catégorie :</b> {{$announce->idCategorie=1}}<br>
                                 <b>Titre :</b> {{$announce->title}}<br>
                                 <b>Description :</b> {{$announce->description}}<br>
                                 <b>Coût Unitaire :</b> {{$announce->price}}<br>
                                 <b>Quantité :</b> {{$announce->inventory}}<br>
                                 <b>Nombre de ventes :</b> {{$announce->nbSales}}<br>
                                 @if($announce->idUser==Auth::id() and $slug<>'index')
-                                [<a href="{{route('deleteAnnounce', $announce->id)}}">delete</a>]
-                                [<a href="{{route('updateAnnounce', $announce->id)}}">update</a>]
-                                @endif
-                                [<a href="{{route('plan', $announce->slug)}}">Like</a>]
-                                [<a href="{{route('plan', $announce->slug)}}">Dislike</a>]
-                                <b>Nb likes : </b> <?= $nbLike?>
-                                @if($announce->idUser!=Auth::id() and $slug<>'myAnnounce' and $announce->inventory > 0)
-                                [<a href="{{route('plan', $announce->slug)}}">Acheter</a>]
-                                @endif
+                                    [<a href="{{route('deleteAnnounce', $announce->id)}}">delete</a>]
+                                    [<a href="{{route('updateAnnounce', $announce->id)}}">update</a>]<br>
+                                    @endif
+                                    [<a href="{{route('like', $announce->id)}}">Like</a>]
+                                    [<a href="{{route('dislike', $announce->id)}}">Dislike</a>]
+                                    <b>Nb likes : </b> <?= $nbLike ?>
+                                    @if($announce->idUser!=Auth::id() and $slug<>'myAnnounce' and $announce->inventory > 0)
+                                        [<a href="{{route('plan', $announce->slug)}}">Acheter</a>]
+                                        @endif
                             </div>
                             @endforeach
                         </div>
