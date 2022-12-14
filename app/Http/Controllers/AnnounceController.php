@@ -11,13 +11,6 @@ use Illuminate\Support\Facades\Session;
 
 class AnnounceController extends Controller
 {
-
-    protected $stripe;
-
-    public function __construct()
-    {
-        $this->stripe = new \Stripe\StripeClient(env('STRIPE_SECRET'));
-    }
     public function index(Request $request)
     {
         $likes = Like::all();
@@ -138,17 +131,29 @@ class AnnounceController extends Controller
         return redirect()->route('myAnnounce'); //redirige vers la page dashboard
     }
 
-    /**
-     * Show the Plan.
-     *
-     * @return mixed
-     */
-    public function show(Request $request)
-    {
-        $paymentMethods = $request->user()->paymentMethods();
-
-        $intent = $request->user()->createSetupIntent();
+    public function checkout(Request $request){
+        \Stripe\Stripe::setApiKey(config(key:'stripe.sk'));
         $announce = Announce::where('slug', $request->announce_id)->firstorfail();
-        return view('plans.show', compact('announce', 'intent'));
+
+        $session = \Stripe\Checkout\Session::create([
+            'line_items' => [
+                [
+                    'price_data' => [
+                        'currency' => 'eur',
+                        'product_data' => [
+                            'name' => $announce->title,
+                        ],
+                        'unit_amount' => $announce->price * 100,
+                    ],
+                    'quantity' => 1,
+                ],
+            ],
+            "mode" => 'payment',
+            'success_url' => route('subscription',$announce->id),
+            'cancel_url' =>route('index'),
+        ]);
+        return redirect()->away($session->url);
     }
+
+     
 }

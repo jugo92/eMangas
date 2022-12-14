@@ -56,16 +56,15 @@ Route::middleware('auth')->group(function () {
     Route::post('/postCategorie', [CategoriesController::class, 'postCategorie'])->name('postCategorie')->middleware('role:admin'); // enregistre la catégorie
     Route::get('/formCategorie', [CategoriesController::class, 'formCategorie'])->name('formCategorie')->middleware('role:admin'); // formulaire de saisie des catégorie
 
-    //STRIPE
+    //LIKE
     Route::get('/like/{announce_id}', [LikeController::class, 'like'])->name('like');
     Route::get('/dislike/{announce_id}', [LikeController::class, 'dislike'])->name('dislike');
-
-    Route::get('/plan/{announce_id}', [AnnounceController::class, 'show'])->name('plan'); // saisie des coord bancaires
+    
+    //STRIPE
     Route::get('/sells', [SubscriptionController::class, 'sells'])->name('sells'); // affiche mes ventes
     Route::get('/purchases', [SubscriptionController::class, 'purchases'])->name('purchases'); // affiche mes achats
-    Route::post('/subscription', [SubscriptionController::class, 'create'])->name('subscription'); // enregistre le paiement
-
-    //LIKE
+    Route::get('/subscription/{announce_id}', [SubscriptionController::class, 'create'])->name('subscription'); // enregistre le paiement
+    Route::post('session/{announce_id}', [AnnounceController::class, 'checkout'])->name('session');
 
 
 });

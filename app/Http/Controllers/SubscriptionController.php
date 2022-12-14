@@ -13,29 +13,11 @@ use Spatie\Flash\Flash;
 
 class SubscriptionController extends Controller
 {
-    protected $stripe;
-
-    public function __construct()
+    public function create(Request $request)
     {
-        $this->stripe = new \Stripe\StripeClient(env('STRIPE_SECRET'));
-    }
-
-    public function create(Request $request, Announce $announce)
-    {
-        $announce = Announce::findOrFail($request->get('plan'));
+        $announce = Announce::findOrFail($request->announce_id);
 
         $subscription = new Subscription();
-
-        // $user = $request->user();
-        // $paymentMethod = $request->paymentMethod;
-
-        // $user->createOrGetStripeCustomer();
-        // $user->updateDefaultPaymentMethod($paymentMethod);
-        // $user->newSubscription('default', $plan->stripe_announce,Auth::id())
-        //     ->create($paymentMethod, [
-        //         'email' => $user->email,
-        //     ]);
-
         $subscription->id_acheteur= Auth::id();
         $subscription->id_vendeur = $announce->idUser;
         $subscription->stripe_announce = $announce->stripe_announce;

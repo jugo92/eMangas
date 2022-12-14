@@ -49,7 +49,10 @@
                                     [<a href="{{route('dislike', $announce->id)}}">Dislike</a>]
                                     <b>Nb likes : </b> <?= $nbLike ?>
                                     @if($announce->idUser!=Auth::id() and $slug<>'myAnnounce' and $announce->inventory > 0)
-                                        [<a href="{{route('plan', $announce->slug)}}">Acheter</a>]
+                                        <form action="{{route('session',$announce->slug)}}" method="POST">
+                                            <input type="hidden" name="_token" value="{{csrf_token()}}">    
+                                            <button type="submit" id="checkout-live-button">Checkout</button>     
+                                        </form>
                                         @endif
                             </div>
                             @endforeach
