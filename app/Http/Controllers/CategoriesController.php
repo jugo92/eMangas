@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Categorie;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 
 class CategoriesController extends Controller
 {
@@ -35,6 +36,7 @@ class CategoriesController extends Controller
             $categorie->name = $request->input('categorie_name');
             $categorie->save();
         }
+        Session::flash('success', 'Catégorie enregistré avec succés');
         return redirect()->route('categories')->with('message', 'Catégorie enregistré avec succés');;
     }
 
@@ -48,6 +50,7 @@ class CategoriesController extends Controller
     {
         DB::table('announce_categorie')->where('categorie_id', $request->categorie_id)->delete();
         Categorie::destroy($request->categorie_id);
+        Session::flash('success', 'Catégorie supprimé avec succés');
         return redirect()->route('categories')->with('message', 'Catégorie supprimé avec succés'); //redirige vers la page dashboard
     }
 }

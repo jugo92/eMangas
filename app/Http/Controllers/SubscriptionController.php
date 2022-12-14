@@ -45,7 +45,8 @@ class SubscriptionController extends Controller
 
         $announce->update(['inventory' => $announce->inventory - 1, 'nbSales' => $announce->nbSales + 1]);
         $subscription->save();
-        return redirect()->route('purchases')->with('message', 'Paiement enregistré avec succés');
+        Session::flash('success', 'Paiement effectué avec succés');
+        return redirect()->route('purchases');
     }
 
     public function sells(Request $request)
@@ -56,7 +57,6 @@ class SubscriptionController extends Controller
 
     public function purchases(Request $request)
     {
-        Session::flash('success', 'Nouveau paiement');
         $subscription = Subscription::all()->where('id_acheteur', Auth::id());
         return view('plans.purchase',['purchases' => $subscription]);
     }

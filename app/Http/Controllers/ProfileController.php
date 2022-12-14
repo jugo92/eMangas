@@ -6,6 +6,7 @@ use App\Http\Requests\ProfileUpdateRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\DB;
 
@@ -51,27 +52,27 @@ class ProfileController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    // public function destroy(Request $request)
-    // {
-    //     $request->validateWithBag('userDeletion', [
-    //         'password' => ['required', 'current-password'],
-    //     ]);
+    public function destroy(Request $request)
+    {
+        $request->validateWithBag('userDeletion', [
+            'password' => ['required', 'current-password'],
+        ]);
 
-    //     $user = $request->user();
-    //     Auth::logout();
+        $user = $request->user();
+        Auth::logout();
 
-    //     foreach ($user->announces as $announce) {
-    //         DB::table('announce_categorie')->where('announce_id', $announce->id)->delete();
-    //     }
-    //     $user->announces()->delete();
-    //     $user->anonymize($user);
-    //     $user->save();
+        foreach ($user->announces as $announce) {
+            DB::table('announce_categorie')->where('announce_id', $announce->id)->delete();
+        }
+        $user->announces()->delete();
+        $user->anonymize($user);
+        $user->save();
 
-    //     $request->session()->invalidate();
-    //     $request->session()->regenerateToken();
-
-    //     Redirect::to('/');
-    // }
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        Session::flash('success', "Votre compte a été supprimé");
+        Redirect::to('/');
+    }
 
     public function destroyUser(Request $request)
     {
@@ -85,6 +86,7 @@ class ProfileController extends Controller
         $userToDelete->anonymize($userToDelete);
         $userToDelete->save();
 
+        Session::flash('success', "Vous avez supprimé l'utilisateur {$userToDelete->id}");
         return Redirect::to('admin_dashboard');
     }
 

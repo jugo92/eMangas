@@ -7,6 +7,7 @@ use App\Models\Categorie;
 use App\Models\Like;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class AnnounceController extends Controller
 {
@@ -112,6 +113,7 @@ class AnnounceController extends Controller
                 $announce->categorie_announces()->attach($id);
             }
         }
+        Session::flash('success', 'Annonce enregistrer avec succés');
         return redirect()->route('myAnnounce');
     }
 
@@ -132,6 +134,7 @@ class AnnounceController extends Controller
             abort(403);
         }
         Announce::destroy($request->announce_id);
+        Session::flash('success', 'Annonce supprimé avec succés');
         return redirect()->route('myAnnounce'); //redirige vers la page dashboard
     }
 
