@@ -64,22 +64,7 @@ class AnnounceController extends Controller
             $announce->avis_negatif = 0;
             $announce->nbSales = 0;
             $announce->slug = strtolower($request->input('announce_title'));
-            // $announce->stripe_announce = 'striped';
-
-            //create stripe product
-            $stripeProduct = $this->stripe->products->create([
-                'name' => $request->input('announce_title')
-            ]);
-
-            //Stripe Plan Creation
-            $stripePlanCreation = $this->stripe->plans->create([
-                'amount' => $request->input('announce_price'),
-                'currency' => 'inr',
-                'interval' => 'month', //  it can be day,week,month or year
-                'product' => $stripeProduct->id,
-            ]);
-
-            $announce->stripe_announce = $stripePlanCreation->id;
+            $announce->stripe_announce = 'striped';
             $announce->save();
             foreach ($arrCategorieId as $id) {
                 $announce->categorie_announces()->attach($id);

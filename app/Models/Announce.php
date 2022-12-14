@@ -43,8 +43,8 @@ class Announce extends Model
         'nbSales'
     ];
 
-    public function getRouteKeyName()
-    {
-        return 'slug';
-    }
+    // public function getRouteKeyName()
+    // {
+    //     return 'slug';
+    // }
 }
