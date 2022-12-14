@@ -29,7 +29,8 @@ class Announce extends Model
         return $this->belongsToMany(Categorie::class);
     }
 
-    public static function isAnnounceMine(int $idUserAnnounce){
+    public static function isAnnounceMine(int $idUserAnnounce)
+    {
         return  Auth::id() === $idUserAnnounce;
     }
 

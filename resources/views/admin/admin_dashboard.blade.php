@@ -32,9 +32,9 @@
                                     <p><b>N° de téléphone : </b>{{$user->phoneNumber}}</p>
                                     <p><b>Adresse : </b>{{$user->adresse}}</p>
                                     <p><b>Role : </b>{{$user->role}}</p>
-                                    <form method="post" action="{{route('propro', $user->id)}}">
-                                    @csrf
-                                    @method('delete')
+                                    <form method="post" action="{{route('propro', $user->id)}}" onsubmit="return confirm('Etes vous sur de vouloir supprimer{{$user->name}}?');">
+                                        @csrf
+                                        @method('delete')
                                         <input type="submit" value="Supprimer">
                                     </form>
                                 </div>

@@ -13,7 +13,8 @@ use Illuminate\Support\Facades\DB;
 class AdminController extends Controller
 {
     //
-    public function admin_dashboard(){
+    public function admin_dashboard()
+    {
         $users = User::where('role', 'user')->paginate(6);
         return view('admin/admin_dashboard', ['users' => $users]);
     }

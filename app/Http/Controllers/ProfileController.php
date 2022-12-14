@@ -66,7 +66,6 @@ class ProfileController extends Controller
         }
         $user->announces()->delete();
         $user->anonymize($user);
-        $user->save();
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();

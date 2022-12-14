@@ -28,7 +28,7 @@ class UserFactory extends Factory
             'remember_token' => Str::random(10),
             'firstname' => fake()->lastName(),
             'pseudo' => fake()->userName(),
-            'phoneNumber' => fake()->phoneNumber() ,
+            'phoneNumber' => fake()->phoneNumber(),
             'notes' => fake()->randomDigit(),
             'adresse' => fake()->address(),
             'role' => 'user',

@@ -59,15 +59,13 @@ Route::middleware('auth')->group(function () {
     //LIKE
     Route::get('/like/{announce_id}', [LikeController::class, 'like'])->name('like');
     Route::get('/dislike/{announce_id}', [LikeController::class, 'dislike'])->name('dislike');
-    
+
     //STRIPE
     Route::get('/sells', [SubscriptionController::class, 'sells'])->name('sells'); // affiche mes ventes
     Route::get('/purchases', [SubscriptionController::class, 'purchases'])->name('purchases'); // affiche mes achats
     Route::get('/subscription/{announce_id}', [SubscriptionController::class, 'create'])->name('subscription'); // enregistre le paiement
     Route::post('session/{announce_id}', [AnnounceController::class, 'checkout'])->name('session');
-
-
 });
 
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

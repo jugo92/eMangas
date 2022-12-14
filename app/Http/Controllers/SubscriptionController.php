@@ -20,7 +20,6 @@ class SubscriptionController extends Controller
         $subscription = new Subscription();
         $subscription->id_acheteur= Auth::id();
         $subscription->id_vendeur = $announce->idUser;
-        $subscription->stripe_announce = $announce->stripe_announce;
         $subscription->price = $announce->price;
         $subscription->created_at= now()->tz('Europe/Paris');;
         $subscription->quantity = 1;

@@ -27,6 +27,11 @@ class CategoriesController extends Controller
 
     public function postCategorie(Request $request)
     {
+
+        $request->validate([
+            'categorie_name' => ['required']
+        ]);
+
         $categorie = new Categorie();
         if($request->input('categorie_id') == null){
             $categorie->name = $request->input('categorie_name');
